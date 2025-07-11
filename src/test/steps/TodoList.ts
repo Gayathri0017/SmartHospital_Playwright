@@ -9,25 +9,21 @@ let t:string;
             todolist=new TodoListPage(pageFixture.page);
             await todolist.clickCalander();
         });
-    
     When('clicks the plus icon to add a task', async function () {
             await todolist.ClickaddTask();
          });
-
-    When('fills in the task details',  { timeout: 20000 },async function (dataTable){
-        const taskList=dataTable.hashes();
-        for (let i = 0; i < taskList.length; i++){
-        t=taskList[i].task;
-        let d=taskList[i].date;
-        if(i!=0){
-            await todolist.ClickaddTask();
-            await pageFixture.page.waitForTimeout(500);
-        }
-        await todolist.addTask(t,d);
-        // await pageFixture.page.waitForTimeout(500);
-        }
+    When('fills in the task {string} with date {string}', async function (task: string, date: string) {
+        await todolist.addTask(task, date);
         });
-    Then('the task should be visible in the To Do List', async function () {
-           await todolist.verifyTask(t);
+    Then('the {string} should be visible in the To Do List', async function (expected: string) {
+        if(expected=="Date field is required"){
+            await todolist.verifyError(expected);
+        }
+        else if(expected=="Title field is required"){
+            await todolist.verifyError(expected);
+        }
+        else{
+            await todolist.verifyTask(expected);
+        }
         });
 
