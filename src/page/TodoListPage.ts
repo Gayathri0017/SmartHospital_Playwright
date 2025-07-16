@@ -22,15 +22,30 @@ export default class TodoListPage{
         await this.page.click(this.todoListPageElements.addTask);
     } 
 
-    async addTask(task:string,date:string){
-        await this.page.fill(this.todoListPageElements.taskName,task);
-        await this.page.waitForTimeout(1000);
-        await this.page.fill(this.todoListPageElements.date,date);
-        // await this.page.waitForTimeout(1000);
-        await this.page.click(this.todoListPageElements.saveBtn);
-        await this.page.waitForTimeout(1000);
-    } 
-    
+    // async addTask(task:string,date:string){
+    //     await this.page.fill(this.todoListPageElements.taskName,task);
+    //     // await this.page.waitForTimeout(1000);
+    //     await this.page.fill(this.todoListPageElements.date,date);
+    //     // await this.page.waitForTimeout(1000);
+    //     await this.page.click(this.todoListPageElements.saveBtn);
+    //     await this.page.waitForTimeout(1000);
+    // } 
+
+    async addTask(task: string, date: string) {
+    const taskInput = this.page.locator(this.todoListPageElements.taskName);
+    const dateInput = this.page.locator(this.todoListPageElements.date);
+    const saveBtn = this.page.locator(this.todoListPageElements.saveBtn);
+    await taskInput.waitFor({ state: 'visible' });
+    // await taskInput.fill('');
+    await taskInput.fill(task);
+    await dateInput.click();
+    await dateInput.press('Control+A'); 
+    await dateInput.press('Backspace');
+    await dateInput.type(date);
+    await this.page.waitForTimeout(500);
+    await saveBtn.click();
+    await this.page.waitForTimeout(4000);
+}
     async verifyTask(name: string) {
     const tasks=await pageFixture.page.locator(this.todoListPageElements.todoList);
     const count=await tasks.count();
