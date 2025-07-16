@@ -23,6 +23,7 @@ let t:string;
             await todolist.verifyError(expected);
         }
         else{
+            await pageFixture.page.waitForTimeout(3000);
             await todolist.verifyTask(expected);
         }
         });
